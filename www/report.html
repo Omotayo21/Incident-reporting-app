@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report an Incident</title>
+    <link rel="stylesheet" href="css/report.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h3>Report an Incident</h3>
+        <a href="index.html" class="back-button">
+            <i class="material-icons">arrow_back</i> 
+        </a>
+    </header>
+    
+    <main>
+        <section id="report-incident">
+            <h2>Report a Community Incident</h2>
+            <p>Please provide as much detail as possible to help us understand the situation.</p>
+
+            <form id="incident-form">
+                <label for="incident-type">Incident Type:</label>
+                <select id="incident-type" required>
+                    <option value="" disabled selected>Select Incident Type</option>
+                    <option value="accident">Accident</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="rioting">Rioting</option>
+                    <option value="theft">Fire</option>
+                    
+                </select>
+
+                <label for="title">Incident Title:</label>
+                <textarea id="title" placeholder="Enter a brief title..." required></textarea>
+
+                <label for="description">Description:</label>
+                <textarea id="description" placeholder="Describe the incident in detail..." required></textarea>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" placeholder="Fetching location..." readonly>
+
+             
+
+                <label for="image-upload">Upload Image (Optional):</label>
+                <input type="file" id="image-upload" accept="image/*">
+                <small>Accepted formats: JPG, PNG, GIF (Max size: 5MB)</small>
+
+                <button type="submit" id="submit-btn">Submit Incident</button>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 Citizens Reporting Solution | All Rights Reserved</p>
+    </footer>
+
+    <script src="js/geolocation.js"></script>
+    <script type="module" src="js/index.js"></script>
+</body>
+</html>

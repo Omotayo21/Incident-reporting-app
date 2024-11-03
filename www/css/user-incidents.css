@@ -1,0 +1,106 @@
+ /* Global Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 40px auto;
+    }
+    
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    a.back-button {
+      text-decoration: none;
+      color: #fff;
+      background-color: #3498db;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    
+    a.back-button:hover {
+      background-color: #2980b9;
+    }
+    
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      margin-bottom: 30px;
+      display: block;
+      width: 100%;
+      max-width: 250px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .incident-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .incident-item {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .incident-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .incident-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #e74c3c;
+    }
+    
+    .incident-location, .incident-date, .incident-description {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #555;
+    }
+    
+    .incident-description {
+      margin-top: 10px;
+    }
+    
+    .incident-image {
+      max-width: 100%;
+      height: auto;
+      margin-top: 15px;
+      border-radius: 5px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .incident-item {
+        padding: 15px;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+      
+      .incident-title {
+        font-size: 1.25rem;
+      }
+    }

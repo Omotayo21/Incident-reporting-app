@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+   <style>
+    /* Universal styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* App Title */
+    .container h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    /* Introductory description */
+    .container p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Input Fields */
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 50px;
+      background-color: #f0f0f0;
+      font-size: 16px;
+      color: #333;
+      outline: none;
+      transition: background-color 0.3s ease;
+    }
+
+    input:focus {
+      background-color: #e6e6e6;
+    }
+
+    /* Login Button */
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 50px;
+      background-color: #007bff;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Google Button */
+    .google-btn {
+      background-color: #4285F4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .google-btn:hover {
+      background-color: #357ae8;
+    }
+
+    .google-btn img {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+    }
+
+  
+    .divider {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #ccc;
+    }
+
+    .divider::before {
+      margin-right: 10px;
+    }
+
+    .divider::after {
+      margin-left: 10px;
+    }
+
+    /* Error Message */
+    .error-message {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+
+    .signup-message {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .signup-message a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .signup-message a:hover {
+      text-decoration: underline;
+    }
+
+  
+    .background-shape {
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 150px;
+      height: 150px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .background-shape-2 {
+      position: absolute;
+      bottom: -40px;
+      left: -40px;
+      width: 120px;
+      height: 120px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 500px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+ <div class="container">
+    <div class="background-shape"></div>
+    <div class="background-shape-2"></div>
+    
+    <h2>Welcome to MyApp</h2>
+    <p> Please log in to continue to your dashboard.</p>
+    
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="login-button">Login</button>
+    
+    <div class="divider">or</div>
+    
+    <button class="google-btn" id="google-login-button">
+      <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Icon"> Login with Google
+    </button>
+<small>Please, logging in with google may cause some issues.</small>
+    <div class="error-message" id="error-message"></div>
+
+    <div class="signup-message">
+      Don't have an account? <a href="signup.html">Sign up here</a>
+    </div>
+  </div>
+
+<script type="module">
+    
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAYORtT_yPLCmeN38hLh7ZhjOjc3N23yU",
+      authDomain: "citizen-report-app-45f6c.firebaseapp.com",
+      projectId: "citizen-report-app-45f6c",
+      storageBucket: "citizen-report-app-45f6c.appspot.com",
+      messagingSenderId: "382465207068",
+      appId: "1:382465207068:web:2b647e65ba8807858c68d9",
+      measurementId: "G-9JFKSH4G0L"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const googleProvider = new GoogleAuthProvider();
+
+    document.getElementById('login-button').addEventListener('click', login);
+    document.getElementById('google-login-button').addEventListener('click', loginWithGoogle);
+
+    async function login() {
+      console.log("Login button clicked");
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorMessage = document.getElementById("error-message");
+      const loginButton = document.getElementById("login-button");
+
+      
+      errorMessage.textContent = '';
+
+    
+      if (!email || !password) {
+        errorMessage.textContent = 'Please fill in both email and password.';
+        return;
+      }
+
+     
+      loginButton.textContent = 'Logging in...';
+      loginButton.disabled = true;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful! Welcome " + userCredential.user.email);
+        window.location.href = "index.html";
+      } catch (error) {
+        errorMessage.textContent = error.message.includes('user-not-found') || error.message.includes('wrong-password') 
+          ? 'Incorrect email or password.' 
+          : error.message;
+      } finally {
+        // Reset the button back to the normal state
+        loginButton.textContent = 'Login';
+        loginButton.disabled = false;
+      }
+    }
+
+   
+    async function loginWithGoogle() {
+      const errorMessage = document.getElementById("error-message");
+      const googleLoginButton = document.getElementById("google-login-button");
+
+    
+      googleLoginButton.textContent = 'Logging in...';
+      googleLoginButton.disabled = true;
+
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        alert("Login with Google successful! Welcome " + result.user.email);
+        window.location.href = "index.html";
+      } catch (error) {
+        errorMessage.textContent = 'Failed to login with Google: ' + error.message;
+      } finally {
+        // Reset the button back to the normal state
+        googleLoginButton.innerHTML = 'Login with Google';
+        googleLoginButton.disabled = false;
+      }
+    }
+</script>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Incidents</title>
+  <link rel="stylesheet" href="css/incidents.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- For Icons -->
+</head>
+<body>
+  <header>
+    <h1>Your Incident Reports</h1>
+    <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+  </header>
+  <main>
+    <p>Find specific incidents by checking the categories</p>
+    <section class="filter-section">
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="fire">Fire</option>
+        <option value="theft">Theft</option>
+        <option value="accident">Accident</option>
+        <option value="fighting">Fighting</option>
+      </select>
+    </section>
+    <ul id="incident-list" class="incident-grid"></ul>
+  </main>
+
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getFirestore, collection, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+  import { Timestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+            apiKey: "AIzaSyDAYORtT_yPLCmeN38hLh7ZhjOjc3N23yU",
+            authDomain: "citizen-report-app-45f6c.firebaseapp.com",
+            projectId: "citizen-report-app-45f6c",
+            storageBucket: "citizen-report-app-45f6c.appspot.com",
+            messagingSenderId: "382465207068",
+            appId: "1:382465207068:web:2b647e65ba8807858c68d9",
+            measurementId: "G-9JFKSH4G0L"
+        };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await fetchUserIncidents('all');
+    } else {
+      alert("No user is signed in");
+    }
+  });
+
+  async function fetchUserIncidents(category) {
+    const incidentList = document.getElementById("incident-list");
+    incidentList.innerHTML = '';  
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        const incidentsCollection = collection(db, "incidents");
+        let userQuery;
+
+        if (category && category !== 'all') {
+          userQuery = query(incidentsCollection, where("userId", "==", user.uid), where("type", "==", category));
+        } else {
+          userQuery = query(incidentsCollection, where("userId", "==", user.uid)); 
+        }
+
+        const incidentSnapshot = await getDocs(userQuery);
+        const incidents = incidentSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        for (const incident of incidents) {
+          const li = document.createElement('li');
+          let imageUrl = '';
+
+          if (incident.image) {
+            const imageRef = ref(storage, incident.image);
+            try {
+              imageUrl = await getDownloadURL(imageRef);
+            } catch (error) {
+              console.error("Error fetching image URL: ", error);
+            }
+          }
+
+          const incidentDate = incident.timestamp instanceof Timestamp ? 
+                               incident.timestamp.toDate() : 
+                               new Date(incident.timestamp);
+
+          li.innerHTML = `
+            <div class="incident-title">${incident.title}</div>
+            <div class="incident-date">${incidentDate.toLocaleDateString()}</div>
+            <div class="incident-location">${incident.location}</div>
+            <p>${incident.description}</p>
+            ${imageUrl ? `<img src="${imageUrl}" alt="Incident Image" width="100">` : 'No image uploaded'}
+            <button class="edit-btn" data-id="${incident.id}"><i class="fas fa-edit"></i> Edit</button>
+            <button class="delete-btn" data-id="${incident.id}"><i class="fas fa-trash-alt"></i> Delete</button>
+          `;
+
+          incidentList.appendChild(li);
+        }
+
+        // Add event listeners to delete buttons
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            const incidentId = e.target.getAttribute('data-id');
+            deleteIncident(incidentId);
+          });
+        });
+
+        // Add event listeners to edit buttons
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            const incidentId = e.target.getAttribute('data-id');
+            // Redirect to report.html with the incidentId as a query parameter
+            window.location.href = `report.html?incidentId=${incidentId}`;
+          });
+        });
+
+      } catch (error) {
+        console.error("Error fetching user-specific incidents: ", error);
+      }
+    } else {
+      alert("No user is signed in");
+    }
+  }
+
+  async function deleteIncident(incidentId) {
+    try {
+      await deleteDoc(doc(db, "incidents", incidentId));
+      alert("Incident successfully deleted!");
+      fetchUserIncidents(document.getElementById("categoryFilter").value);
+    } catch (error) {
+      console.error("Error deleting incident: ", error);
+    }
+  }
+
+  document.getElementById("categoryFilter").addEventListener("change", (e) => {
+    fetchUserIncidents(e.target.value);
+  });
+</script>
+
+</body>
+</html>

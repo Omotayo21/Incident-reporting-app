@@ -1,0 +1,246 @@
+/* Basic Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    color: white;
+    padding: 2em 0;
+    text-align: center;
+    position: relative;
+}
+
+header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+}
+
+header p.tagline {
+    font-size: 1.2em;
+    margin-bottom: 1.5em;
+}
+
+header .cta-button {
+    background-color: #28a745;
+    color: white;
+    padding: 0.7em 1.5em;
+    border-radius: 50px;
+    font-size: 1.1em;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+header .cta-button:hover {
+    background-color: #218838;
+}
+
+nav {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+nav .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+nav .nav-links {
+    list-style: none;
+    display: flex;
+}
+
+nav .nav-links li {
+    margin-right: 1.5em;
+}
+
+nav .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav .nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* Main Content */
+main {
+    padding: 3em 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.get-involved {
+    text-align: center;
+}
+
+.get-involved h2 {
+    font-size: 2em;
+    margin-bottom: 1.5em;
+}
+
+.info-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+.card i {
+    font-size: 3em;
+    color: #007BFF;
+    margin-bottom: 1em;
+}
+
+.card h3 {
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+}
+
+.card p {
+    font-size: 1.1em;
+    margin-bottom: 1.5em;
+}
+
+.button {
+    background-color: #007BFF;
+    color: white;
+    padding: 0.7em 1.5em;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Statistics Section */
+.statistics {
+    text-align: center;
+    padding: 3em 0;
+    background-color: #f9f9f9;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5em;
+    overflow-x: auto;
+
+}
+
+.stats-list li {
+    background: #007BFF;
+    color: white;
+    padding: 1.5em;
+    border-radius: 10px;
+    margin: 0 1em;
+}
+
+/* Newsletter */
+.newsletter {
+    text-align: center;
+    padding: 3em 0;
+}
+
+.newsletter form {
+    margin-top: 1.5em;
+}
+
+.newsletter input {
+    padding: 1em;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    width: 300px;
+}
+
+.newsletter button {
+    padding: 1em 2em;
+    border-radius: 50px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    margin-left: 1em;
+    margin-top: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.newsletter button:hover {
+    background-color: #218838;
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 2em 0;
+}
+
+footer .social-links {
+    margin: 1em 0;
+}
+
+footer .social-links a {
+    margin: 0 1em;
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+footer .social-links a:hover {
+    color: #007BFF;
+}
+
+#sign-out-button {
+    cursor: pointer;
+     padding: 1em 2em;
+    border-radius: 50px;
+    background-color: red;
+    color: white;
+    border: none;
+    margin-left: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+h2{
+    margin-top: 0.75em;
+}

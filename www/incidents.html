@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Reports</title>
+    <link rel="stylesheet" href="css/incidents.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- For Icons -->
+</head>
+<body>
+    <header>
+        <h1>Incident Reports</h1>
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> </a>
+    </header>
+
+    <main>
+        <p>Find specific incidents by checking the categories</p>
+        <section class="filter-section">
+            
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="fire">Fire</option>
+                <option value="theft">Rioting</option>
+                <option value="accident">Accident</option>
+                <option value="fighting">Fighting</option>
+            </select>
+           
+        </section>
+
+        <ul id="incident-list" class="incident-grid">
+        </ul>
+    </main>
+
+    <footer>
+        <p>© 2024 Citizens Reporting Solution</p>
+    </footer>
+
+    <script type="module">
+        import { Timestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAYORtT_yPLCmeN38hLh7ZhjOjc3N23yU",
+            authDomain: "citizen-report-app-45f6c.firebaseapp.com",
+            projectId: "citizen-report-app-45f6c",
+            storageBucket: "citizen-report-app-45f6c.appspot.com",
+            messagingSenderId: "382465207068",
+            appId: "1:382465207068:web:2b647e65ba8807858c68d9",
+            measurementId: "G-9JFKSH4G0L"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+   async function fetchIncidents(category) {
+    const incidentList = document.getElementById("incident-list");
+    incidentList.innerHTML = '';  
+
+    try {
+        const incidentsCollection = collection(db, "incidents");
+        let incidentQuery;
+
+        if (category && category !== 'all') {
+            incidentQuery = query(incidentsCollection, where("type", "==", category));
+        } else {
+            incidentQuery = query(incidentsCollection); // No category filter
+        }
+
+        const incidentSnapshot = await getDocs(incidentQuery);
+        const incidents = incidentSnapshot.docs.map(doc => doc.data());
+
+        incidents.forEach(incident => {
+            console.log(incident);
+
+         
+            const imageUrl = incident.image;
+
+            const li = document.createElement('li');
+            const incidentDate = incident.timestamp instanceof Timestamp ? 
+                                 incident.timestamp.toDate() : 
+                                 new Date(incident.timestamp); // Fallback if needed
+
+            li.innerHTML = `
+                <div class="incident-title">${incident.title}</div>
+
+                <div class="incident-location">${incident.location}</div>
+                            <div class="incident-date">${incidentDate.toLocaleDateString()}</div>
+                <div class="incident-description">${incident.description}</div>
+                ${imageUrl ? `<img src="${imageUrl}" alt="${incident.title}" class="incident-image">` : 'No image available'}
+            `;
+            incidentList.appendChild(li);
+        });
+    } catch (error) {
+        console.error("Error fetching incidents: ", error);
+    }
+}
+
+       
+        document.getElementById("categoryFilter").addEventListener("change", (e) => {
+            fetchIncidents(e.target.value);
+        });
+
+       
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchIncidents('all');
+        });
+    </script>
+</body>
+</html>
